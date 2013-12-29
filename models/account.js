@@ -1,21 +1,24 @@
 'use strict';
 
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcrypt')
+  , crypto = require('crypto')
+;
 
-var authenticate, hashSecret;
+var authenticate, genSecret, hashSecret;
 
 module.exports = function (sequelize, DataTypes) {
   var Account = sequelize.define('Account', {
-    user_id: {type: DataTypes.STRING, unique: true},
-    hashed_secret: {
-      type: DataTypes.STRING
-    }
+    user_id: { type: DataTypes.STRING, unique: true },
+    secret: { type: DataTypes.STRING }
   }, {
+    classMethods: {
+      genSecret: genSecret
+    },
     instanceMethods: {
-      authenticate: authenticate
+      authenticate: authenticate,
     },
     hooks: {
-      beforeValidate: hashSecret
+      beforeCreate: hashSecret
     }
   }
 );
@@ -29,8 +32,16 @@ authenticate = function (plaintext, callback) {
   bcrypt.compare(plaintext, this.hashed_secret, callback);
 };
 
+// Generates secret- there is no reason to have the
+// developer come up with their own
+genSecret = function () {
+  return 'till-' + crypto.randomBytes(24).toString('hex');
+};
 
 // Callback is called with err, new_value
-hashSecret = function (plaintext, callback) {
-  bcrypt.hash(plaintext, 10, callback);
+hashSecret = function (account, callback) {
+  bcrypt.hash('bingo', 10, function (err, hashed_secret) {
+    account.secret = hashed_secret;
+    callback(err, account);
+  });
 };

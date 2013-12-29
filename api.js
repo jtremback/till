@@ -1,5 +1,7 @@
 'use strict';
 
+var db = require('./models');
+
 var client_infos = {
   DOGE: {
     host: 'localhost',
@@ -15,8 +17,28 @@ var client_infos = {
   }
 };
 
-var clientCaller = new require('./clientCaller')(client_infos);
+var CC = require('./clientCaller');
+var clientCaller = new CC(client_infos);
 
-exports.view = function (req, res) {
-    
-}
+exports.viewWallet = function (req, res) {
+
+};
+
+exports.createAddress = function (req, res) {
+
+};
+
+exports.viewAccount = function (req, res) {
+  res.json(JSON.stringify(req.user));
+};
+
+exports.createAccount = function (req, res) {
+  var secret = db.Account.genSecret()
+    , user_id = req.body.user_id;
+
+  // The secret is only shown once, so theyd better write it down
+  db.Account.create({ user_id: user_id, secret: secret })
+  .success(function() {
+    res.json({ user_id: user_id, secret: secret });
+  });
+};
