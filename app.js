@@ -50,7 +50,7 @@ app.post('/account', api.createAccount);
 app.get('/account', passport.authenticate('basic', { session: false }), api.viewAccount);
 
 app.post('/wallets/:wallet/new_address', passport.authenticate('basic', { session: false }), api.newAddress);
-app.get('/wallets/:wallet/view', passport.authenticate('basic', { session: false }), api.viewWallet);
+app.get('/wallets/:wallet', passport.authenticate('basic', { session: false }), api.viewWallet);
 
 
 

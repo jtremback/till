@@ -10,7 +10,7 @@ module.exports = function (client_infos) {
   this.callClients = function (clients, method, params, callback) {
 
     // Returns new object with only info from selected clients
-    var clients = populate(clients, client_infos);
+    var clients = clients ? populate(clients, client_infos) : client_infos;
 
     console.log(clients)
 
