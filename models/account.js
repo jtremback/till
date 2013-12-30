@@ -8,7 +8,7 @@ var authenticate, genSecret, hashSecret;
 
 module.exports = function (sequelize, DataTypes) {
   var Account = sequelize.define('Account', {
-    user_id: { type: DataTypes.STRING, unique: true },
+    id: { type: DataTypes.STRING, unique: true },
     secret: { type: DataTypes.STRING }
   }, {
     classMethods: {

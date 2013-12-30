@@ -7,9 +7,15 @@ var unirest = require('unirest');
 module.exports = function (client_infos) {
   this.client_infos = client_infos;
 
-  this.callClients = function (method, params, callback) {
+  this.callClients = function (clients, method, params, callback) {
+
+    // Returns new object with only info from selected clients
+    var clients = populate(clients, client_infos);
+
+    console.log(clients)
+
     async.mapValues(
-      this.client_infos,
+      clients,
       function (value, key, cb) {
         unirest.post('http://' + value.user + ':' + value.pass + '@' + value.host + ':' + value.port)
         .send({
@@ -24,3 +30,11 @@ module.exports = function (client_infos) {
       callback);
   };
 };
+
+function populate(array, object) {
+  var ret = {};
+  array.forEach(function (value) {
+    ret[value] = object[value];
+  });
+  return ret;
+}

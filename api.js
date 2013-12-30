@@ -21,11 +21,22 @@ var CC = require('./clientCaller');
 var clientCaller = new CC(client_infos);
 
 exports.viewWallet = function (req, res) {
+  // Wallet ids are created by concatenating the account_id with the given wallet
+  var wallet = req.user.account_id + req.query.wallet;
 
+  clientCaller.callClients(null, 'getbalance', wallet, function (err, response) {
+    return res.json(response);
+  });
 };
 
-exports.createAddress = function (req, res) {
+exports.newAddress = function (req, res) {
+  // Wallets ids are created by concatenating the 
+  var wallet = req.user.account_id + req.query.wallet
+    , clients = req.body.coin;
 
+  clientCaller.callClients(clients, 'getnewaddress', wallet, function (err, response) {
+    return res.json(response);
+  });
 };
 
 exports.viewAccount = function (req, res) {
@@ -34,11 +45,11 @@ exports.viewAccount = function (req, res) {
 
 exports.createAccount = function (req, res) {
   var secret = db.Account.genSecret()
-    , user_id = req.body.user_id;
+    , account_id = req.body.account_id;
 
   // The secret is only shown once, so theyd better write it down
-  db.Account.create({ user_id: user_id, secret: secret })
+  db.Account.create({ id: account_id, secret: secret })
   .success(function() {
-    res.json({ user_id: user_id, secret: secret });
+    res.json({ account_id: account_id, secret: secret });
   });
 };

@@ -11,8 +11,8 @@ var BasicStrategy = require('passport-http').BasicStrategy;
 //   credentials (in this case, a username and password), and invoke a callback
 //   with a user object.
 passport.use(new BasicStrategy(
-  function (user_id, secret, callback) {
-    db.Account.find( { where: { user_id: user_id } } )
+  function (id, secret, callback) {
+    db.Account.find( { where: { id: id } } )
     .error(function () {
       // Callback with error on no user
       return callback(new Error('Failed authentication.'));
@@ -35,9 +35,7 @@ var app = express();
 
 // configure Express
 app.configure(function() {
-  // Strips auth secret from logs *VERY IMPORTANT!*
   app.use(function(req, res, next){
-    var safe_url = req.url.match(/\@(.*)/);
     console.log('request: %s %s', req.method, req.url);
     next();
   });
@@ -51,15 +49,11 @@ app.configure(function() {
 app.post('/account', api.createAccount);
 app.get('/account', passport.authenticate('basic', { session: false }), api.viewAccount);
 
-// Init db and start server
-db.sequelize
-.sync({ force: false })
-.complete(function(err) {
-  if (err) {
-    throw err;
-  } else {
-    app.listen(3000, function(){
-      console.log('Express server listening on port ' + 3000);
-    });
-  }
+app.post('/wallets/:wallet/new_address', passport.authenticate('basic', { session: false }), api.newAddress);
+app.get('/wallets/:wallet/view', passport.authenticate('basic', { session: false }), api.viewWallet);
+
+
+
+app.listen(3000, function(){
+  console.log('Express server listening on port ' + 3000);
 });
