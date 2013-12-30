@@ -17,27 +17,60 @@ var client_infos = {
   }
 };
 
-var CC = require('./clientCaller');
-var clientCaller = new CC(client_infos);
+var CoinClients = require('./coin-clients');
+var coinClients = new CoinClients(client_infos);
 
-exports.viewWallet = function (req, res) {
-  // Wallet ids are created by concatenating the account_id with the given wallet
-  var wallet = req.user.account_id + req.query.wallet;
+exports.move = function (req, res) {
+  var wallet = req.user.id + '-' + req.params.wallet
+    , clients = req.body.coin
+    , to_wallet = req.user.id + '-' + req.body.to_wallet
+    , amount = req.body.amount
+  ;
 
-  clientCaller.callClients(null, 'getbalance', wallet, function (err, response) {
+  var params = [ wallet, to_wallet, amount ];
+
+  coinClients.callClients(clients, 'move', params, function (err, response) {
+    return res.json(response);
+  });
+};
+
+exports.view = function (req, res) {
+  var wallet = req.user.id + '-' + req.params.wallet;
+
+  var params = [ wallet ];
+
+  coinClients.callClients(null, 'getbalance', params, function (err, response) {
+    return res.json(response);
+  });
+};
+
+exports.send = function (req, res) {
+  var wallet = req.user.id + '-' + req.params.wallet
+    , clients = req.body.coin // There should only be one. make sure to validate.
+    , to_address = req.body.to_address
+    , amount = req.body.amount
+  ;
+
+  var params = [ wallet, to_address, amount ];
+
+  coinClients.callClients(clients, 'sendfrom', params, function (err, response) {
     return res.json(response);
   });
 };
 
 exports.newAddress = function (req, res) {
-  // Wallets ids are created by concatenating the 
-  var wallet = req.user.account_id + req.query.wallet
+  var wallet = req.user.id + '-' + req.params.wallet
     , clients = req.body.coin;
 
-  clientCaller.callClients(clients, 'getnewaddress', wallet, function (err, response) {
+  var params = [ wallet ];
+
+  coinClients.callClients(clients, 'getnewaddress', params, function (err, response) {
     return res.json(response);
   });
 };
+
+
+
 
 exports.viewAccount = function (req, res) {
   res.json(JSON.stringify(req.user));

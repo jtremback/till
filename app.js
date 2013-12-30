@@ -35,11 +35,11 @@ var app = express();
 
 // configure Express
 app.configure(function() {
+  app.use(express.json({strict: true}));
   app.use(function(req, res, next){
-    console.log('request: %s %s', req.method, req.url);
+    console.log('request: %s %s', req.method, req.url, req.body);
     next();
   });
-  app.use(express.json({strict: true}));
   app.use(passport.initialize());
   app.use(app.router);
 });
@@ -50,7 +50,9 @@ app.post('/account', api.createAccount);
 app.get('/account', passport.authenticate('basic', { session: false }), api.viewAccount);
 
 app.post('/wallets/:wallet/new_address', passport.authenticate('basic', { session: false }), api.newAddress);
-app.get('/wallets/:wallet', passport.authenticate('basic', { session: false }), api.viewWallet);
+app.get('/wallets/:wallet', passport.authenticate('basic', { session: false }), api.view);
+app.post('/wallets/:wallet/send', passport.authenticate('basic', { session: false }), api.send);
+app.post('/wallets/:wallet/move', passport.authenticate('basic', { session: false }), api.move);
 
 
 
