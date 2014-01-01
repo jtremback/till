@@ -1,24 +1,10 @@
 'use strict';
 
 var db = require('./models');
-
-var client_infos = {
-  DOGE: {
-    host: 'localhost',
-    port: 22555,
-    user: 'dogecoinrpc',
-    pass: '5XGwqwdaKRL5pbhEJ62XftWVATysUJ44Fdy1gjF2F61R'
-  },
-  BTC: {
-    host: 'localhost',
-    port: 22555,
-    user: 'dogecoinrpc',
-    pass: '5XGwqwdaKRL5pbhEJ62XftWVATysUJ44Fdy1gjF2F61R'
-  }
-};
+var config = require('./config')();
 
 var CoinClients = require('./coin-clients');
-var coinClients = new CoinClients(client_infos);
+var coinClients = new CoinClients(config.client_infos);
 
 exports.move = function (req, res) {
   var wallet = req.user.id + '-' + req.params.wallet
