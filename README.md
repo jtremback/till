@@ -66,4 +66,8 @@ Till currently does not accomplish many of the goals above. Right now it simply 
 
 - [x] Multiple API consumer accounts
 - [x] Multiple currencies
-- [ ] 
+- [ ] ACID accounts system
+- [ ] Clean up API
+- [ ] Update API docs
+- [ ] Build scripts, docs, etc
+- [ ] Cold wallet system
