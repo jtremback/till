@@ -5,6 +5,21 @@ Till is a cryptocoin wallet server that is easy to set up and administer with an
 
 Till is a completely self-contained server that communicates with the rest of your app with a simple HTTP API. This encapsulation should result in fewer loose ends around configuration, and encourage a secure setup. We worry about security, allowing app developers to focus on app development.
 
+##Current Status
+
+Till currently does not accomplish many of the goals above. Right now it simply wraps several Satoshi clients, allowing the developer to interact with multiple coins. It also supports multiple API consumers, with their own auth and set of virtual wallets.
+
+###Todo (in loose order of priority)
+
+ - :white_check_mark: Multiple API consumer accounts
+ - :white_check_mark: Multiple currencies
+ - :x: ACID accounts system
+ - :x: Tests! (Don't want to write these until the new accounts are done)
+ - :x: Clean up API
+ - :x: Update API docs
+ - :x: Build scripts, docs, etc
+ - :x: Cold wallet system
+
 ##Goals
 
 At first glance, the headless Satoshi client (bitcoind, litecoind etc.) seems to be an ideal choice to build a web app around. It has an HTTP API, is self-contained, and even has an account system. However, there are numerous limitations and gotchas. 
@@ -57,18 +72,3 @@ The Satoshi client does not encrypt wallets or use HTTPS out of the box. This st
 ###Cold Wallets
 
 The best way to avoid theft and minimize losses is to store a majority of your coins offline, leaving only the amount neccesary for daily transactions in the wallet server. Till will have a cold wallet system that automatically sends coins to an external wallet to maintain a constant percentage of total coins on the server. When the balance of coins in Till is insufficient to fulfill withdrawals, the administrator will be notified so that they can send more back to Till.
-
-##Current Status
-
-Till currently does not accomplish many of the goals above. Right now it simply wraps several Satoshi clients, allowing the developer to interact with multiple coins. It also supports multiple API consumers, with their own auth and set of virtual wallets.
-
-###Todo (in loose order of priority)
-
-- [x] Multiple API consumer accounts
-- [x] Multiple currencies
-- [ ] ACID accounts system
-- [ ] Tests! (Don't want to write these until the new accounts are done)
-- [ ] Clean up API
-- [ ] Update API docs
-- [ ] Build scripts, docs, etc
-- [ ] Cold wallet system
