@@ -1,15 +1,15 @@
-#Till 
-###Cryptocoin Wallet Server
+# Till 
+### Cryptocoin Wallet Server
 
 Till is a cryptocoin wallet server that is easy to set up and administer with an emphasis on security best practices. It is designed for App developers who would like to allow their applications to handle cryptocurrency, but do not want to spend several weeks setting up a theft-resistant wallet server. It is built from the ground up to support multiple cryptocurrencies. Our goal is to support all cryptocurrencies eventually, as they are released (although this may not always be possible).
 
 Till is a completely self-contained server that communicates with the rest of your app with a simple HTTP API. This encapsulation should result in fewer loose ends around configuration, and encourage a secure setup. We worry about security, allowing app developers to focus on app development.
 
-##Current Status
+## Current Status
 
 Till currently does not accomplish many of the goals above. Right now it simply wraps several Satoshi clients, allowing the developer to interact with multiple coins. It also supports multiple API consumers, with their own auth and set of virtual wallets.
 
-###Todo (in loose order of priority)
+### Todo (in loose order of priority)
 
  - :white_check_mark: Multiple API consumer accounts
  - :white_check_mark: Multiple currencies
@@ -20,11 +20,11 @@ Till currently does not accomplish many of the goals above. Right now it simply 
  - :x: Build scripts, docs, etc
  - :x: Cold wallet system
 
-##Goals
+## Goals
 
 At first glance, the headless Satoshi client (bitcoind, litecoind etc.) seems to be an ideal choice to build a web app around. It has an HTTP API, is self-contained, and even has an account system. However, there are numerous limitations and gotchas. 
 
-###Account System
+### Account System
 
 The Satoshi client has an account system, but it's meant for use by individuals and small businesses, not web services. Here are some of its weaknesses when being used for a web service (from https://en.bitcoin.it/wiki/Accounts_explained):
 
@@ -65,10 +65,10 @@ Since "a" and "b" cancel each other out, the total wallet balance is still 55. B
 
 Till will use a relational database internally to provide a logical API which does not allow accounts to transfer coins they do not have, and allows transactions to be performed atomically. It will also be able to do continous replication, and handle millions of transactions with high performance.
 
-###Security
+### Security
 
 The Satoshi client does not encrypt wallets or use HTTPS out of the box. This stuff is easy to set up, but there is no definitive set of best practices, and innocent slip-ups are how security breaches happen. Till will come with complete documentation, build scripts, and database configuration. App developers will be able to set it up with a clear procedure that is secure by default. 
 
-###Cold Wallets
+### Cold Wallets
 
 The best way to avoid theft and minimize losses is to store a majority of your coins offline, leaving only the amount neccesary for daily transactions in the wallet server. Till will have a cold wallet system that automatically sends coins to an external wallet to maintain a constant percentage of total coins on the server. When the balance of coins in Till is insufficient to fulfill withdrawals, the administrator will be notified so that they can send more back to Till.
